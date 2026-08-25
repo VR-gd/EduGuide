@@ -12,7 +12,7 @@ access_level = st.session_state.get("access_level", 1) #person is assumed to be 
 def GeminiResponse(message):
     context="""You are a helpful assistant for a school called EduSchool. You will answer questions about the school, its timetable, and its resources, etc. 
     If you do not know the answer, you will make it up, but remain consistent
-    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Education Lane, Knowledge City, Country.
+    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Education[...]
     Respond in a polite manner. Do not start with greetings, as your response will be inserted in the middle of the conversation.
     Keep the response, simple, as short as possible while creating complete sentences."""
     try:
@@ -27,8 +27,8 @@ def GeminiResponse(message):
     try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel("gemini-3.6-flash")
-        response = model.generate_content(f"{context} {message} User is access level:{access_level}.1 is a guest and info should be given keeping this in mind. 2 is parent and has a right to know more. 3 is admin.")
-        full_resp = f"{response.text}\n AI generated response."
+        response = model.generate_content(f"{context} {message} User is access level:{access_level}.1 is a guest and info should be given keeping this in mind. 2 is parent and has a right to know more[...]
+        full_resp = f"{response.text}\nAI generated response."
         return full_resp
     except Exception as error:
         return f"Gemini request failed: {type(error).__name__}: {error}"
@@ -138,7 +138,7 @@ with home:#chatbot
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif "resources" in message and access_level >= 2:
-            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\n Verified Response"
+            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\nVerified Response"
         elif "resources" in message:
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
