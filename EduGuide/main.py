@@ -27,7 +27,8 @@ def GeminiResponse(message):
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel("gemini-3.6-flash")
         response = model.generate_content(f"{context} {message} User is access level:{access_level}.1 is a guest and info should be given keeping this in mind. 2 is parent and has a right to know more. 3 is admin.")
-        return response.text
+        full_resp = f"{response.text}\nAI generated response."
+        return full_resp
     except Exception as error:
         return f"Gemini request failed: {type(error).__name__}: {error}"
 
@@ -120,7 +121,7 @@ with home:#chatbot
 
         #if any greeting from the list is included in user query
         if any(greeting.strip().lower() in message.strip().lower() for greeting in greetings):
-            response = "Hello, I am EduGuide Bot. How may I help you?"
+            response = "Hello, I am EduGuide Bot. How may I help you?\nVerified Response"
 
         elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days) and access_level >= 2:
             day = next(day for day in days if day.lower() in message)
@@ -129,23 +130,24 @@ with home:#chatbot
                 response = f"{day}'s timetable:\n"
                 for period,subject in timetable_data[day].items():
                     response += f"{period}: {subject}\n"
+                response += "Verified Response"
             else:
-                response = f"No timetable data available for {day}."
+                response = f"No timetable data available for {day}.\nVerified Response"
         elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif "resources" in message and access_level >= 2:
-            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there."
+            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\nVerified Response"
         elif "resources" in message:
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif ("contact" in message or "teacher" in message or "email" in message or "phone" in message or "number" in message or "call" in message or "meet" in message) and access_level >= 2:
-            response = "Contacts can be found in the 'Contacts' tab. You can find phone numbers and emails for various departments there."
+            response = "Contacts can be found in the 'Contacts' tab. You can find phone numbers and emails for various departments there.\nVerified Response"
         elif ("contact" in message or "teacher" in message or "email" in message or "phone" in message or "number" in message or "call" in message or "meet" in message):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif "location" in message or "where" in message or "place" in message or "address" in message and access_level >= 1:
-            response = "EduSchool is located at 123 Education Lane, Knowledge City, Country."
+            response = "EduSchool is located at 123 Education Lane, Knowledge City, Country.\nVerified Response"
 
         else:#add unknown query to be implemented later
             response = GeminiResponse(user_message)
@@ -155,7 +157,6 @@ with home:#chatbot
         st.session_state["chat_history"].append({"role": "user", "content": user_message})
         st.session_state["chat_history"].append({"role": "assistant", "content": response})
         st.rerun()
-
 
 with timetable:
     st.header("Timetable")#title
