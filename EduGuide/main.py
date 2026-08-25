@@ -12,7 +12,7 @@ access_level = st.session_state.get("access_level", 1) #person is assumed to be 
 def GeminiResponse(message):
     context="""You are a helpful assistant for a school called EduSchool. You will answer questions about the school, its timetable, and its resources, etc. 
     If you do not know the answer, you will make it up, but remain consistent
-    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Education[...]
+    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Educa[...]
     Respond in a polite manner. Do not start with greetings, as your response will be inserted in the middle of the conversation.
     Keep the response, simple, as short as possible while creating complete sentences."""
     try:
@@ -27,7 +27,12 @@ def GeminiResponse(message):
     try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel("gemini-3.6-flash")
-        response = model.generate_content(f"{context} {message} User is access level:{access_level}.1 is a guest and info should be given keeping this in mind. 2 is parent and has a right to know more[...]
+        prompt = (
+            f"{context} {message} User is access level:{access_level}. "
+            "1 is a guest and info should be given keeping this in mind. "
+            "2 is parent and has a right to know more."
+        )
+        response = model.generate_content(prompt)
         full_resp = f"{response.text}\nAI generated response."
         return full_resp
     except Exception as error:
@@ -147,7 +152,7 @@ with home:#chatbot
         elif ("contact" in message or "teacher" in message or "email" in message or "phone" in message or "number" in message or "call" in message or "meet" in message):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
-        elif "location" in message or "where" in message or "place" in message or "address" in message and access_level >= 1:
+        elif ("location" in message or "where" in message or "place" in message or "address" in message) and access_level >= 1:
             response = "EduSchool is located at 123 Education Lane, Knowledge City, Country.\nVerified Response"
 
         else:#add unknown query to be implemented later
@@ -289,4 +294,3 @@ with login:
                 st.rerun()
             else:
                 st.error("Invalid administrator credentials.")
-
