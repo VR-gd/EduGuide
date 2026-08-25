@@ -11,7 +11,12 @@ def GeminiResponse(message):
     If you do not know the answer, you will make it up, but remain consistent
     If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Education Lane, Knowledge City, Country.
     Respond in a polite """
-    api_key = os.getenv("GEMINI_API_KEY")
+    try:
+        api_key = st.secrets.get("GEMINI_API_KEY")
+    except FileNotFoundError:
+        api_key = None
+
+    api_key = api_key or os.getenv("GEMINI_API_KEY")
     if not api_key:
         return "Gemini is not configured. Please add a GEMINI_API_KEY."
 
