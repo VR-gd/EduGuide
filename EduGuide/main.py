@@ -5,6 +5,9 @@ import os
 import streamlit as st
 import google.generativeai as genai
 
+BASE_DIR = Path(__file__).resolve().parent
+TEST_DATA_DIR = BASE_DIR / "test_data"
+
 access_level = st.session_state.get("access_level", 1) #person is assumed to be guest until login
 def GeminiResponse(message):
     context="""You are a helpful assistant for a school called EduSchool. You will answer questions about the school, its timetable, and its resources, etc. 
@@ -92,9 +95,12 @@ greetings = ("hi,hello,yo,what's good,hey,good mornin,good evenin,salutations, w
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 access_level = st.session_state.get("access_level", 1) #person is assumed to be guest until login
 
-credentials_file = Path("./test_data/credentials.json")
-with credentials_file.open("r", encoding="utf-8") as file:
-    credentials = json.load(file)
+credentials_file = TEST_DATA_DIR / "credentials.json"
+try:
+    with credentials_file.open("r", encoding="utf-8") as file:
+        credentials = json.load(file)
+except (OSError, json.JSONDecodeError):
+    credentials = {"parents": [], "administrator": {}}
 
 #content for each tab
 with home:#chatbot
@@ -143,7 +149,7 @@ with home:#chatbot
 
         else:#add unknown query to be implemented later
             response = GeminiResponse(user_message)
-            with open("./test_data/new_messages.txt", "a") as file:
+            with (TEST_DATA_DIR / "new_messages.txt").open("a", encoding="utf-8") as file:
                 file.write(f"{user_message}\n")
 
         st.session_state["chat_history"].append({"role": "user", "content": user_message})
@@ -157,7 +163,8 @@ with timetable:
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     periods = ["Period 1", "Period 2", "Period 3", "Period 4", "Period 5", "Period 6", "Period 7", "Period 8"]
 
-    save_dir = Path("./test_data")#this is where timetable.json is saved
+    save_dir = TEST_DATA_DIR#this is where timetable.json is saved
+    save_dir.mkdir(exist_ok=True)
     file_path = save_dir / "timetable.json"
 
     if "timetable_loaded" not in st.session_state:#if timetable is not cached
