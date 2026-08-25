@@ -127,7 +127,7 @@ with home:#chatbot
 
         #if any greeting from the list is included in user query
         if any(greeting.strip().lower() in message.strip().lower() for greeting in greetings):
-            response = "Hello, I am EduGuide Bot. How may I help you?\nVerified Response"
+            response = "Hello, I am EduGuide Bot. How may I help you?\n[Verified Response]"
 
         elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days) and access_level >= 2:
             day = next(day for day in days if day.lower() in message)
