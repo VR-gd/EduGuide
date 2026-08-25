@@ -1,0 +1,52 @@
+{
+  "Monday": {
+    "Period 1": "Math",
+    "Period 2": "Science",
+    "Period 3": "English",
+    "Period 4": "",
+    "Period 5": "",
+    "Period 6": "",
+    "Period 7": "",
+    "Period 8": ""
+  },
+  "Tuesday": {
+    "Period 1": "",
+    "Period 2": "",
+    "Period 3": "",
+    "Period 4": "",
+    "Period 5": "",
+    "Period 6": "",
+    "Period 7": "",
+    "Period 8": ""
+  },
+  "Wednesday": {
+    "Period 1": "",
+    "Period 2": "",
+    "Period 3": "French",
+    "Period 4": "",
+    "Period 5": "",
+    "Period 6": "",
+    "Period 7": "",
+    "Period 8": ""
+  },
+  "Thursday": {
+    "Period 1": "",
+    "Period 2": "",
+    "Period 3": "",
+    "Period 4": "",
+    "Period 5": "",
+    "Period 6": "",
+    "Period 7": "",
+    "Period 8": ""
+  },
+  "Friday": {
+    "Period 1": "",
+    "Period 2": "",
+    "Period 3": "",
+    "Period 4": "",
+    "Period 5": "",
+    "Period 6": "",
+    "Period 7": "",
+    "Period 8": ""
+  }
+}
