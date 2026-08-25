@@ -14,7 +14,7 @@ def GeminiResponse(message):
     If you do not know the answer, you will make it up, but remain consistent
     If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Educa[...]
     Respond in a polite manner. Do not start with greetings, as your response will be inserted in the middle of the conversation.
-    Keep the response, simple, as short as possible while creating complete sentences."""
+    Keep the response, simple, as short as possible while creating complete sentences. Do not answer questions which are out of scope."""
     try:
         api_key = st.secrets.get("GEMINI_API_KEY")
     except FileNotFoundError:
@@ -33,7 +33,7 @@ def GeminiResponse(message):
             "2 is parent and has a right to know more."
         )
         response = model.generate_content(prompt)
-        full_resp = f"{response.text}\nAI generated response."
+        full_resp = f"{response.text}\n[AI generated response]"
         return full_resp
     except Exception as error:
         return f"Gemini request failed: {type(error).__name__}: {error}"
@@ -136,24 +136,24 @@ with home:#chatbot
                 response = f"{day}'s timetable:\n"
                 for period,subject in timetable_data[day].items():
                     response += f"{period}: {subject}\n"
-                response += "Verified Response"
+                response += "[Verified Response]"
             else:
                 response = f"No timetable data available for {day}.\nVerified Response"
         elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif "resources" in message and access_level >= 2:
-            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\nVerified Response"
+            response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\n[Verified Response]"
         elif "resources" in message:
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif ("contact" in message or "teacher" in message or "email" in message or "phone" in message or "number" in message or "call" in message or "meet" in message) and access_level >= 2:
-            response = "Contacts can be found in the 'Contacts' tab. You can find phone numbers and emails for various departments there.\nVerified Response"
+            response = "Contacts can be found in the 'Contacts' tab. You can find phone numbers and emails for various departments there.\n[Verified Response]"
         elif ("contact" in message or "teacher" in message or "email" in message or "phone" in message or "number" in message or "call" in message or "meet" in message):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
 
         elif ("location" in message or "where" in message or "place" in message or "address" in message) and access_level >= 1:
-            response = "EduSchool is located at 123 Education Lane, Knowledge City, Country.\nVerified Response"
+            response = "EduSchool is located at 123 Education Lane, Knowledge City, Country.\n[Verified Response]"
 
         else:#add unknown query to be implemented later
             response = GeminiResponse(user_message)
