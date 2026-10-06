@@ -12,7 +12,7 @@ access_level = st.session_state.get("access_level", 1) #person is assumed to be 
 def GeminiResponse(message):
     context="""You are a helpful assistant for a school called EduSchool. You will answer questions about the school, its timetable, and its resources, etc. 
     If you do not know the answer, you will make it up, but remain consistent
-    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Educa[...]
+    If the user asks for resources or contacts, you will tell them to check the respective tabs in the app. If the user asks for the location of the school, you will provide the address: 123 Education Lane, Knowledge City, Country.
     Respond in a polite manner. Do not start with greetings, as your response will be inserted in the middle of the conversation.
     Keep the response, simple, as short as possible while creating complete sentences. Do not answer questions which are out of scope."""
     try:
@@ -90,7 +90,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
 </style>
 """, unsafe_allow_html=True)
 
-#tab name and icon
+#set page config and header
 st.set_page_config(page_title="EduGuide", page_icon="📙", layout="wide")
 st.markdown('<div class="top-header">📖 EduGuide</div>', unsafe_allow_html=True)
 
@@ -120,7 +120,7 @@ with home:#chatbot
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    user_message = st.chat_input("Message")
+    user_message = st.chat_input('Ask, "Finance team contact details."')
 
     if user_message:
         message = user_message.lower().strip()
