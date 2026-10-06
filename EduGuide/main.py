@@ -125,11 +125,8 @@ with home:#chatbot
     if user_message:
         message = user_message.lower().strip()
 
-        #if any greeting from the list is included in user query
-        if any(greeting.strip().lower() in message.strip().lower() for greeting in greetings):
-            response = "Hello, I am EduGuide Bot. How may I help you?\n[Verified Response]"
-
-        elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days) and access_level >= 2:
+        #if timetable keyword is in user query with day and access level is sufficient
+        if "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days) and access_level >= 2:
             day = next(day for day in days if day.lower() in message)
             timetable_data = st.session_state.get("loaded_timetable", {})
             if day in timetable_data:
@@ -141,6 +138,9 @@ with home:#chatbot
                 response = f"No timetable data available for {day}.\nVerified Response"
         elif "timetable" in message and any(day.strip().lower() in message.strip().lower() for day in days):
             response = "Sorry, you need to be logged in as a parent or administrator to access this feature."
+
+        elif any(greeting.strip().lower() in message.strip().lower() for greeting in greetings):
+            response = "Hello, I am EduGuide Bot. How may I help you?\n[Verified Response]"
 
         elif "resources" in message and access_level >= 2:
             response = "Resources can be found in the 'Platforms' tab. You can find IB resources, practice websites, and more there.\n[Verified Response]"
